@@ -1,52 +1,65 @@
 # Promptbook UI
 
-Do you find yourself writing the same prompts again and again into ChatGPT?
+Do you find yourself writing the same kind of prompts again and again into ChatGPT?
 Work your most used prompts into a comfy graphic user interface with just a few lines of code.
 
 Promptbook allows you to:
  - Have a customizable UI from a simple prompt-building Python function
- - Store your prompts and use the recipes created from the community
+ - Store your GUI-prompts to reuse them on a click
+ - Use fantastic recipe ideas from the community
 
-## How to use
-TODO
-
-## Build your recipe
-Use the template in `recipes/do_something.py` and take it from there. The code
+## Example 
+For a simple example, the recipe in `recipes/correct_text/py`:
 ```python
 # the recipe: build your prompt with required, default and optional inputs
-def do_something(
-        ingredient_1: str,  # required ingredient
-        ingredient_2: str = "spaghetti",  # required ingredient with a default value
-        ingredient_3: int = None,  # optional ingredient (use `[]` for lists)
+def correct_text(
+        text: str,
+        style: str = None
 ) -> str:
     prompt = f"""
-This is the base prompt.  
-It uses the mandatory ingredient {ingredient_1}, which MUST be filled by the user.
-""" # This is ugly indenting, but it really helps visualizing the prompts
-    # Indenting / new lines do not have impact on GPTs response
+Your task is to correct and improve the text that is shown delimited by quotation marks below.
 
-    if ingredient_3 is not None:
-        prompt = prompt + \
-                 f"Here I add the optional ingredient {ingredient_3}, only in case the user fills it."
+"{text}"
 
-    prompt = prompt + \
-             f"Here I add {ingredient_2}, which will be spaghetti if the user does not fill it."
+Output only the corrected text and perform the following actions:
+ 1. Identify and correct spelling errors
+ 2. Identify and correct grammatical issues
+ 3. If necessary, improve readability and reduce verbosity
+"""
+
+    if style is not None:
+        prompt = prompt + f" 4. Make sure the text is written in {style} style."
 
     return prompt
-
-
-# optional user interface details
-# feel free to use as many as you want
-_title = "Fantastic recipe"  # a descriptive title for your recipe
-_author = "Gordon Ramsey"  # your name or github user
-_description = "This recipe makes doing something much easier!"  # what the recipe does / use cases
-_ui = {  # additional UI information for each ingredient
-    "ingredient_1": {  # must have the same name as the function argument it refers to
-        "text": "Provide essential ingredient",  # some explanatory text written before the input field
-        "help": "This is very important",  # a helper text shown on hover
-        "suggestions": "Peanut butter",  # some examples to show in the input placeholder
-    },
-}
 ```
-will automatically be transformed into:
-![alt text](media/template.png)
+Will automatically be shown in the app as:
+
+![alt text](media/example.png)
+
+## How to use
+**To use the current recipes just get to [Promptbook UI](promptbook.streamlit.app) and start playing!** If you do not have an OpenAI API key to launch the prompts, you can generate them and copy-paste into [ChatGPT](ChatGPT).
+
+To create your own recipes, follow the guide below.
+
+### Install Promptbook UI
+To create your own recipe Follow these steps (assuming you have Python and Conda installed):
+ 0. Decide on its name. Preferred syntax is `verb_noun`, for example `correct_text`
+ 1. Fork this GitHub repository
+ 2. Clone it into your machine and locate the terminal inside: `git clone git@github.com:<your_github_username>/promptbook.git` -> `cd promptbook`
+ 3. Make a new branch for your recipe: `git checkout -b verb_noun`
+ 4. Create a new conda environment and activate it: `conda env create -n promptbook` -> `conda activate promptbook`
+ 5. Install required packages in the new env: `pip install requirements.txt`
+
+### Create your recipe!
+Now you just have to create your script in `recipes/verb_noun.py`, and inside the prompt-generation function with the same name `def verb_noun() -> str:`.
+
+For your first recipe your best bet is start from the code in `template.py`
+
+Now launch the app locally with `python -m streamlit run app.py` and start prototyping! Everytime you save your code, the app reruns automatically to display the changes.
+
+### Contribute
+If you are satisfied with your recipe share it to see it in the online [Promptbook UI](promptbook.streamlit.app)!
+ 1. Commit your recipe script `git add recipes/verb_noun.py` -> `git commit -m "Upload recipe"`
+ 2. Push it to your forked repo `git push -u origin verb_noun`
+ 3. Make a Pull Request in the [GitHub repo](https://github.com/nachollorca/promptbook), I will take care everything is alright and merge it to the online app :party:.
+
