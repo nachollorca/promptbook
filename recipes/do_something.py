@@ -9,6 +9,7 @@ This is the base prompt.
 It uses the mandatory ingredient {ingredient_1}, which MUST be filled by the user.
 """ # This is ugly indenting, but it really helps visualizing the prompts
     # Indenting / new lines do not have impact on GPTs response
+    # See docs/prompt_strings_formatting
 
     if ingredient_3 is not None:
         prompt = prompt + \
