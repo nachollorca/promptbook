@@ -1,3 +1,4 @@
+# TODO: include inputs to modify number of paragraphs/sentences etc.
 def write_cover_letter(
         job: str,
         resume: str,
