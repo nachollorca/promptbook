@@ -45,10 +45,22 @@ To create your own recipes, follow the guide below.
 To create your own recipe Follow these steps (assuming you have Python and Conda installed):
  0. Decide on its name. Preferred syntax is `verb_noun`, for example `correct_text`
  1. Fork this GitHub repository
- 2. Clone it into your machine and locate the terminal inside: `git clone git@github.com:<your_github_username>/promptbook.git` -> `cd promptbook`
- 3. Make a new branch for your recipe: `git checkout -b verb_noun`
- 4. Create a new conda environment and activate it: `conda env create -n promptbook` -> `conda activate promptbook`
- 5. Install required packages in the new env: `pip install requirements.txt`
+ 2. Clone it into your machine and locate the terminal inside: 
+```shell
+git clone git@github.com:<your_github_username>/promptbook.git
+cd promptbook
+```
+ 4. Make a new branch for your recipe: 
+```shell
+git checkout -b verb_noun
+```
+ 5. Create a new conda environment, activate it and install required packages: 
+```shell
+conda env create -n promptbook
+conda activate promptbook
+pip install -f requirements.txt
+```
+
 
 ### Create your recipe!
 Now you just have to create your script in `recipes/verb_noun.py`, and inside the prompt-generation function with the same name `def verb_noun() -> str:`.
@@ -59,7 +71,14 @@ Now launch the app locally with `python -m streamlit run app.py` and start proto
 
 ### Contribute
 If you are satisfied with your recipe share it to see it in the online [Promptbook UI](promptbook.streamlit.app)!
- 1. Commit your recipe script `git add recipes/verb_noun.py` -> `git commit -m "Upload recipe"`
- 2. Push it to your forked repo `git push -u origin verb_noun`
+ 1. Commit your recipe script
+```shell
+git add recipes/verb_noun.py
+git commit -m "Upload recipe"
+```
+ 2. Push it to your forked repo 
+```shell
+git push -u origin verb_noun
+```
  3. Make a Pull Request in the [GitHub repo](https://github.com/nachollorca/promptbook), I will take care everything is alright and merge it to the online app :party:.
 
