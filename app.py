@@ -7,13 +7,15 @@ from inspect import cleandoc
 from prompt import launch_prompt
 
 # set page metadata
-st.set_page_config(page_title="Promptbook")
-
+st.set_page_config(page_title="Promptbook", page_icon="media/logo.png")
+st.image("media/head.png", use_column_width=True)
 
 with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
     # load and choose recipe
     recipes = [item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")]
-    recipe = st.selectbox(label="Choose a recipe", options=recipes)
+    #c1, c2 = st.columns(2)
+    recipe = st.selectbox(label="Choose a recipe", options=recipes, )
+    st.caption(f":link:[Check recipe source code](https://github.com/nachollorca/promptbook/blob/main/recipes/{recipe}.py)")
 
     # import chosen recipe
     spec = importlib.util.spec_from_file_location("recipe", f"recipes/{recipe}.py")
@@ -52,7 +54,7 @@ with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
             params[name].update(ui[name])
 
 
-with st.expander("**:knife: Ingredients**", expanded=True):
+with st.expander("**:green_salad: Ingredients**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
     for arg, info in params.items():
@@ -85,7 +87,7 @@ with st.expander("**:knife: Ingredients**", expanded=True):
     if c1.button("Visualize prompt", use_container_width=True):
         st.markdown(prompt)
     if c2.button("Fine-tune prompt", use_container_width=True):
-        prompt = st.text_area("Edit prompt", value=prompt)
+        prompt = st.text_area("Edit prompt", value=prompt, label_visibility="hidden")
 
 
 with st.expander("**:fire: Kitchen**", expanded=True):
@@ -94,6 +96,7 @@ with st.expander("**:fire: Kitchen**", expanded=True):
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
     api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored")
     temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0, help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
+
     if st.button("Cook prompt", use_container_width=True):
         with st.spinner("**:gear:** on it..."):
             output = launch_prompt(prompt, api_key, model, temperature)
