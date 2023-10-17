@@ -32,11 +32,11 @@ Output only the corrected text and perform the following actions:
 
     return prompt
 ```
-...is automatically be shown in the app as...
+...will automatically be shown in the app as...
 
 ![Simple example](media/example.png)
 
-**Promptbook** is built upon Python function signatures and type hints. That is why by just using plain Python, you can build powerful and personalized GUIs for your prompts:
+**Promptbook** is built upon Python function signatures and type hints on the inside, mixed up with [Streamlit](www.streamlit.io) at the front end. This allows you to use just plain Python tu build more powerful and highly customizable GUIs for your prompts:
 
 ![Complex example](media/example2.png)
 

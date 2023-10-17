@@ -2,6 +2,7 @@ This step-by-step tutorial explains how you can create your own recipes, test th
 
 ### Install Promptbook UI
 To create your own recipe Follow these steps (assuming you have Python and Conda installed):
+
  0. Decide on its name. Preferred syntax is `verb_noun`, for example `correct_text`
  1. Fork this GitHub repository
  2. Clone it into your machine and locate the terminal inside: 
