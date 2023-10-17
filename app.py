@@ -92,8 +92,8 @@ with st.expander("**:fork_and_knife: Table**", expanded=True):
 
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
     api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored")
-
+    temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0, help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
     if st.button("Launch prompt", use_container_width=True):
         with st.spinner("**:gear:** on it..."):
-            output = launch_prompt(prompt, api_key, model)
+            output = launch_prompt(prompt, api_key, model, temperature)
         st.write(output)
