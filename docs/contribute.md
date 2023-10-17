@@ -1,6 +1,7 @@
+# Contribute your recipe
 This step-by-step tutorial explains how you can create your own recipes, test them locally and ultimately upload them to the online-app.
 
-### Install Promptbook UI
+## Install Promptbook UI
 To create your own recipe Follow these steps (assuming you have Python and Conda installed):
 
  0. Decide on its name. Preferred syntax is `verb_noun`, for example `correct_text`
@@ -14,16 +15,20 @@ cd promptbook
 ```shell
 git checkout -b verb_noun
 ```
- 5. Create a new conda environment, activate it and install required packages: 
+ 5. Create a new conda environment and activate it: 
 ```shell
-conda env create -n promptbook
+conda create -n promptbook
 conda activate promptbook
-pip install -f requirements.txt
+```
+ 6. Install `pip` and the required dependencies for promptbook:
+```shell
+conda install pip
+pip install -r requirements.txt
 ```
 
 
-### Create your recipe!
-Now you just have to create your script in `recipes/verb_noun.py`, and inside the prompt-generation function with the same name `def verb_noun() -> str:`.
+## Create your recipe!
+Now you just have to create your script in `recipes/verb_noun.py`, and inside the prompt-generation function **WITH THE SAME NAME** `def verb_noun() -> str:`.
 
 For your first recipe your best bet is start from the code in the template [`recipes/do_something.py`](recipes/do_something.py) and edit it to your needs:
 ```python
@@ -66,7 +71,7 @@ _ui = {  # additional UI information for each ingredient
 
 Now launch the app locally with `python -m streamlit run app.py` and start prototyping! Everytime you save your code, the app reruns automatically to display the changes.
 
-### Contribute
+## Upload to the online app
 If you are satisfied with your recipe share it to see it in the online [Promptbook UI](promptbook.streamlit.app)!
  1. Commit your recipe script
 ```shell
