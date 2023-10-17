@@ -6,15 +6,37 @@ import inspect
 from inspect import cleandoc
 from prompt import launch_prompt
 
-# set page metadata
-st.set_page_config(page_title="Promptbook", page_icon="media/logo.png")
+# set page
+st.set_page_config(page_title="Promptbook", page_icon="media/logo.png", initial_sidebar_state="collapsed")
 st.image("media/head.png", use_column_width=True)
+with st.sidebar:
+    """
+# [Promptbook UI](https://github.com/nachollorca/promptbook/)
+Do you find yourself writing the same kind of prompts again and again into ChatGPT?
+Work your most used prompts into a comfy graphic user interface with just a few lines of code.
+
+Promptbook allows you to:
+ - Have a customizable UI from a simple prompt-building Python function
+ - Store your GUI-prompts to reuse them on a click
+ - Use fantastic recipe ideas from other contributors
+ 
+## How it works
+**Promptbook** is built upon Python function signatures and type hints. Then, Streamlit is used to provide a graphic interface.
+
+In essence, a parser reads the prompt-generating function, identifies the arguments and creates according streamlit input widgets in the application.
+
+Lastly, a Prompt class queries the OpenAI API and computes the answer, together with its token context and resulting cost.
+
+## How to use
+**To use the current recipes just get to play around in here.** If you do not have an OpenAI API key to launch the prompts, you can generate them and copy-paste into [ChatGPT](https://chat.openai.com/).
+
+To create your own recipes, head over to [`docs/contribute.md`](https://github.com/nachollorca/promptbook/blob/main/docs/contribute.md). To learn best practices on prompt engineering, I recommend [this compendium](https://www.promptingguide.ai/introduction/tips).
+"""
 
 with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
     # load and choose recipe
     recipes = [item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")]
-    #c1, c2 = st.columns(2)
-    recipe = st.selectbox(label="Choose a recipe", options=recipes, )
+    recipe = st.selectbox(label="Choose a recipe", options=recipes)
     st.caption(f":link:[Check recipe source code](https://github.com/nachollorca/promptbook/blob/main/recipes/{recipe}.py)")
 
     # import chosen recipe
@@ -94,7 +116,7 @@ with st.expander("**:fire: Kitchen**", expanded=True):
     c1, c2 = st.columns(2)
 
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
-    api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored")
+    api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored", help="If you do not have one, simply click on `Visualize prompt` above and copy paste the generated prompt into [ChatGPT]()")
     temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0, help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
 
     if st.button("Cook prompt", use_container_width=True):
