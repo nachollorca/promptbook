@@ -1,3 +1,5 @@
+# THIS IS A TEMPLATE FUNCTION!
+
 # the recipe: build your prompt with required, default and optional inputs
 def do_something(
         ingredient_1: str,  # required ingredient
@@ -23,7 +25,7 @@ It uses the mandatory ingredient {ingredient_1}, which MUST be filled by the use
 
 # optional user interface details
 # feel free to use as many as you want
-_title = "Fantastic recipe"  # a descriptive title for your recipe
+_title = "This is a basic recipe template"  # a descriptive title for your recipe
 _author = "Gordon Ramsey"  # your name or github user
 _description = "This recipe makes doing something much easier!"  # what the recipe does / use cases
 _ui = {  # additional UI information for each ingredient
