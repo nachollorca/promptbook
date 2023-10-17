@@ -9,6 +9,7 @@ from prompt import launch_prompt
 # set page metadata
 st.set_page_config(page_title="Promptbook")
 
+
 with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
     # load and choose recipe
     recipes = [item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")]
@@ -51,7 +52,7 @@ with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
             params[name].update(ui[name])
 
 
-with st.expander("**:cook: Kitchen**", expanded=True):
+with st.expander("**:knife: Ingredients**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
     for arg, info in params.items():
@@ -87,13 +88,13 @@ with st.expander("**:cook: Kitchen**", expanded=True):
         prompt = st.text_area("Edit prompt", value=prompt)
 
 
-with st.expander("**:fork_and_knife: Table**", expanded=True):
+with st.expander("**:fire: Kitchen**", expanded=True):
     c1, c2 = st.columns(2)
 
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
     api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored")
     temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0, help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
-    if st.button("Launch prompt", use_container_width=True):
+    if st.button("Cook prompt", use_container_width=True):
         with st.spinner("**:gear:** on it..."):
             output = launch_prompt(prompt, api_key, model, temperature)
         st.write(output)
