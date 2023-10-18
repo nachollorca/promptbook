@@ -37,5 +37,8 @@ Max Mustermann
     "my_answer": {
         "help": "My quickly drafted answer for GPT to improve",
         "suggestions": "ok, bro"
+    },
+    "style": {
+        "suggestions": "formal, friendly, fun..."
     }
 }
