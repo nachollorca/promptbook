@@ -20,7 +20,7 @@ Usa un estilo {estilo}. Se conciso y evita redundancia y verbosidad.
     return prompt
 
 _title = "Responde emails a toda velocidad"
-_description = "A menudo me lleva más tiempo dar estilo a mis mensajes que pensar realmente en la respuesta. Este pequeño prompt me permite simplemente hacer un borrador rápido de mis pensamientos en un cuadro y dejar que GPT haga el resto."
+_description = "Normalmente me lleva más tiempo escribir correctamente el mensaje que pensar en la respuesta en si. Este pequeño prompt me permite simplemente hacer un borrador rápido de mis pensamientos en un cuadro y dejar que GPT haga el resto."
 _ui ={
     "correo_al_que_responder": {
         "suggestions": """Estimado Sr. Smith,

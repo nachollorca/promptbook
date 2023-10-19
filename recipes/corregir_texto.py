@@ -7,9 +7,9 @@ Tu tarea consiste en corregir y mejorar el texto que se muestra a continuación 
 
 "{texto}"
 
-Devuelve sólo el texto corregido y realice las siguientes acciones:
- 1. Identifica y correge los errores ortográficos.
- 2. Identifica y correge los problemas gramaticales
+Devuelve sólo el texto corregido y realiza las siguientes acciones:
+ 1. Identifica y corrige los errores ortográficos.
+ 2. Identifica y corrige los problemas gramaticales
  3. Si es necesario, mejora la legibilidad y reduce la verbosidad
 """
 
