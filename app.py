@@ -4,7 +4,7 @@ import importlib.util
 import sys
 import inspect
 from inspect import cleandoc
-from prompt import launch_prompt
+from prompt import launch_prompt, get_token_cost
 
 # set page
 st.set_page_config(page_title="Promptbook", page_icon="media/logo.png", initial_sidebar_state="collapsed")
@@ -35,7 +35,7 @@ To create your own recipes, head over to [`docs/contribute.md`](https://github.c
 
 with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
     # load and choose recipe
-    recipes = [item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")]
+    recipes = sorted([item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")])
     recipe = st.selectbox(label="Choose a recipe", options=recipes)
     st.caption(f":link:[Check recipe source code](https://github.com/nachollorca/promptbook/blob/main/recipes/{recipe}.py)")
 
@@ -122,4 +122,13 @@ with st.expander("**:fire: Kitchen**", expanded=True):
     if st.button("Cook prompt", use_container_width=True):
         with st.spinner("**:gear:** on it..."):
             output = launch_prompt(prompt, api_key, model, temperature)
+            in_cost = get_token_cost(prompt, model, "input")
+            out_cost = get_token_cost(output, model, "output")
+
         st.write(output)
+
+        st.divider()
+
+        c1, c2 = st.columns(2)
+        c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
+        c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
