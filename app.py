@@ -5,6 +5,7 @@ import sys
 import inspect
 from inspect import cleandoc
 from prompt import launch_prompt, get_token_cost
+from utils import are_required_filled
 
 # set page
 st.set_page_config(page_title="Promptbook", page_icon="media/logo.png", initial_sidebar_state="collapsed")
@@ -94,6 +95,7 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
                 help=info.get("help", None),
                 placeholder=info.get("suggestions", None),
             )
+
         # TODO: make input fields for other class types i.e. multiselect for lists
 
     # fill empty fields with default values
@@ -104,12 +106,19 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
     # generate prompt
     prompt = cleandoc(function(**args))
 
-    # inspect prompt
+    # inspect/tune prompt
     c1, c2 = st.columns(2)
     if c1.button("Visualize prompt", use_container_width=True):
-        st.markdown(prompt)
+        if are_required_filled(args, params):
+            st.markdown(prompt)
+        else:
+            st.warning("Please fill in all required values.")
+
     if c2.button("Fine-tune prompt", use_container_width=True):
-        prompt = st.text_area("Edit prompt", value=prompt, label_visibility="hidden")
+        if are_required_filled(args, params):
+            prompt = st.text_area("Edit prompt", value=prompt, label_visibility="hidden")
+        else:
+            st.warning("Please fill in all required values.")
 
 
 with st.expander("**:fire: Kitchen**", expanded=True):
@@ -119,16 +128,19 @@ with st.expander("**:fire: Kitchen**", expanded=True):
     api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored", help="If you do not have one, simply click on `Visualize prompt` above and copy paste the generated prompt into [ChatGPT]()")
     temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0, help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
 
-    if st.button("Cook prompt", use_container_width=True):
-        with st.spinner("**:gear:** on it..."):
-            output = launch_prompt(prompt, api_key, model, temperature)
-            in_cost = get_token_cost(prompt, model, "input")
-            out_cost = get_token_cost(output, model, "output")
+    if st.button("Launch prompt", use_container_width=True):
+        if not are_required_filled(args, params):
+            st.warning("Please fill in all required values.")
+        else:
+            with st.spinner("**:gear:** on it..."):
+                output = launch_prompt(prompt, api_key, model, temperature)
+                in_cost = get_token_cost(prompt, model, "input")
+                out_cost = get_token_cost(output, model, "output")
 
-        st.write(output)
+            st.write(output)
 
-        st.divider()
+            st.divider()
 
-        c1, c2 = st.columns(2)
-        c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
-        c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
+            c1, c2 = st.columns(2)
+            c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
+            c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
