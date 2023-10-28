@@ -2,22 +2,15 @@ import openai
 import tiktoken
 
 
-def launch_prompt(input_text: str, api_key: str, model = "gpt-4", temperature = 0) -> str:
+def launch_prompt(messages: list, api_key: str, model = "gpt-4", temperature = 0) -> str:
     openai.api_key = api_key
 
-    # in_cost = get_cost(input_text, model, "input")
-    # print(f"This prompt costs ca. {round(in_cost,5)} $ to compute")
-
-    messages = [{"role": "user", "content": input_text}]
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,
         temperature=temperature,
     )
     output_text = response.choices[0].message["content"]
-
-    # cost = get_cost(output_text, model, "output")
-    # print(f"This answer costs ca. {round(cost,5)} $ to compute")
 
     return output_text
 

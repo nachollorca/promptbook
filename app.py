@@ -76,7 +76,7 @@ with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
         if ui is not None and name in ui.keys():
             params[name].update(ui[name])
 
-
+messages = []
 with st.expander("**:green_salad: Ingredients**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
@@ -121,6 +121,10 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
             st.warning("Please fill in all required values.")
 
 
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+
 with st.expander("**:fire: Kitchen**", expanded=True):
     c1, c2 = st.columns(2)
 
@@ -133,14 +137,29 @@ with st.expander("**:fire: Kitchen**", expanded=True):
             st.warning("Please fill in all required values.")
         else:
             with st.spinner("**:gear:** on it..."):
-                output = launch_prompt(prompt, api_key, model, temperature)
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                output = launch_prompt(st.session_state.messages, api_key, model, temperature)
+                st.session_state.messages.append({"role": "assistant", "content": output})
                 in_cost = get_token_cost(prompt, model, "input")
                 out_cost = get_token_cost(output, model, "output")
-
-            st.write(output)
-
-            st.divider()
 
             c1, c2 = st.columns(2)
             c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
             c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
+
+
+if st.session_state.messages != []:
+    for message in st.session_state.messages[1:]:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+
+    if user_reply := st.chat_input("Continue interacting with the AI."):
+        st.session_state.messages.append({"role": "user", "content": user_reply})
+        with st.chat_message("user"):
+            st.write(user_reply)
+
+        ai_reply = launch_prompt(st.session_state.messages, api_key, model, temperature)
+        st.session_state.messages.append({"role": "assistant", "content": ai_reply})
+        with st.chat_message("assistant"):
+            st.write(ai_reply)
+
