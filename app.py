@@ -5,7 +5,7 @@ import sys
 import inspect
 from inspect import cleandoc
 from prompt import launch_prompt, get_token_cost
-from utils import are_required_filled
+from utils import are_required_filled, reset_chat_callback
 
 # set page
 st.set_page_config(page_title="Promptbook", page_icon="media/logo.png", initial_sidebar_state="collapsed")
@@ -20,7 +20,7 @@ Promptbook allows you to:
  - Have a customizable UI from a simple prompt-building Python function
  - Store your GUI-prompts to reuse them on a click
  - Use fantastic recipe ideas from other contributors
- 
+
 ## How it works
 **Promptbook** is built upon Python function signatures and type hints. Then, Streamlit is used to provide a graphic interface.
 
@@ -34,11 +34,16 @@ Lastly, a Prompt class queries the OpenAI API and computes the answer, together 
 To create your own recipes, head over to [`docs/contribute.md`](https://github.com/nachollorca/promptbook/blob/main/docs/contribute.md). To learn best practices on prompt engineering, I recommend [this compendium](https://www.promptingguide.ai/introduction/tips).
 """
 
+# initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
 with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
     # load and choose recipe
     recipes = sorted([item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")])
-    recipe = st.selectbox(label="Choose a recipe", options=recipes)
-    st.caption(f":link:[Check recipe source code](https://github.com/nachollorca/promptbook/blob/main/recipes/{recipe}.py)")
+    recipe = st.selectbox(label="Choose a recipe", options=recipes, on_change=reset_chat_callback)
+    st.caption(
+        f":link:[Check recipe source code](https://github.com/nachollorca/promptbook/blob/main/recipes/{recipe}.py)")
 
     # import chosen recipe
     spec = importlib.util.spec_from_file_location("recipe", f"recipes/{recipe}.py")
@@ -76,7 +81,6 @@ with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
         if ui is not None and name in ui.keys():
             params[name].update(ui[name])
 
-
 with st.expander("**:green_salad: Ingredients**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
@@ -95,7 +99,6 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
                 help=info.get("help", None),
                 placeholder=info.get("suggestions", None),
             )
-
         # TODO: make input fields for other class types i.e. multiselect for lists
 
     # fill empty fields with default values
@@ -120,17 +123,15 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
         else:
             st.warning("Please fill in all required values.")
 
-# initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
 # hyperparameter selection
 with st.expander("**:fire: Kitchen**", expanded=True):
     c1, c2 = st.columns(2)
 
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
-    api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored", help="If you do not have one, simply click on `Visualize prompt` above and copy paste the generated prompt into [ChatGPT]()")
-    temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0, help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
+    api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored",
+                            help="If you do not have one, simply click on `Visualize prompt` above and copy paste the generated prompt into [ChatGPT]()")
+    temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0,
+                            help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
 
     if st.button("Launch prompt", use_container_width=True):
         if not are_required_filled(args, params):
