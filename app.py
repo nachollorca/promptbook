@@ -34,11 +34,13 @@ Lastly, a Prompt class queries the OpenAI API and computes the answer, together 
 To create your own recipes, head over to [`docs/contribute.md`](https://github.com/nachollorca/promptbook/blob/main/docs/contribute.md). To learn best practices on prompt engineering, I recommend [this compendium](https://www.promptingguide.ai/introduction/tips).
 """
 
+
 # initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
+
+with st.expander("**:bookmark_tabs: Index**", expanded=True):
     # load and choose recipe
     recipes = sorted([item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")])
     recipe = st.selectbox(label="Choose a recipe", options=recipes, on_change=reset_chat_callback)
@@ -81,7 +83,8 @@ with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
         if ui is not None and name in ui.keys():
             params[name].update(ui[name])
 
-with st.expander("**:green_salad: Ingredients**", expanded=True):
+
+with st.expander("**:arrow_forward: Inputs**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
     for arg, info in params.items():
@@ -123,8 +126,9 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
         else:
             st.warning("Please fill in all required values.")
 
+
 # hyperparameter selection
-with st.expander("**:fire: Kitchen**", expanded=True):
+with st.expander("**:gear: Model parameters**", expanded=True):
     c1, c2 = st.columns(2)
 
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
