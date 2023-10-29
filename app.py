@@ -76,7 +76,7 @@ with st.expander("**:bookmark_tabs: Cookbook index**", expanded=True):
         if ui is not None and name in ui.keys():
             params[name].update(ui[name])
 
-messages = []
+
 with st.expander("**:green_salad: Ingredients**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
@@ -120,11 +120,11 @@ with st.expander("**:green_salad: Ingredients**", expanded=True):
         else:
             st.warning("Please fill in all required values.")
 
-
+# initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-
+# hyperparameter selection
 with st.expander("**:fire: Kitchen**", expanded=True):
     c1, c2 = st.columns(2)
 
@@ -147,7 +147,7 @@ with st.expander("**:fire: Kitchen**", expanded=True):
             c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
             c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
 
-
+# chat
 if st.session_state.messages != []:
     for message in st.session_state.messages[1:]:
         with st.chat_message(message["role"]):
