@@ -4,7 +4,7 @@ import importlib.util
 import sys
 import inspect
 from inspect import cleandoc
-from utils import *
+from src.utils import *
 
 # set page
 st.set_page_config(page_title="Promptbook", page_icon="media/logo.png", initial_sidebar_state="collapsed")
@@ -38,7 +38,7 @@ To create your own recipes, head over to [`docs/contribute.md`](https://github.c
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-
+# gui index
 with st.expander("**:bookmark_tabs: Index**", expanded=True):
     # load and choose recipe
     recipes = sorted([item.strip(".py") for item in os.listdir("recipes") if item.endswith(".py")])
@@ -83,17 +83,24 @@ with st.expander("**:bookmark_tabs: Index**", expanded=True):
             params[name].update(ui[name])
 
 
+# gui inputs
 with st.expander("**:arrow_forward: Inputs**", expanded=True):
     # grab arguments for the function and create user interface
     args = {}
     for arg, info in params.items():
         if info.get("text", None) is not None:
             st.write(info.get("text"))
+
         if str(info["type"]) in ["<class 'int'>", "<class 'float'>"]:
             args[arg] = st.number_input(
                 label=info["label"],
                 help=info.get("help", None),
                 placeholder=info.get("suggestions", None),
+            )
+        elif str(info["type"]) == "<class '_io.BytesIO'>":
+            args[arg] = st.file_uploader(
+                label=info["label"],
+                help=info.get("help", None)
             )
         else:
             args[arg] = st.text_area(
@@ -126,7 +133,7 @@ with st.expander("**:arrow_forward: Inputs**", expanded=True):
             st.warning("Please fill in all required values.")
 
 
-# ai settings
+# gui ai settings
 with st.expander("**:bulb: AI settings**", expanded=True):
     c1, c2 = st.columns(2)
 
@@ -152,11 +159,8 @@ with st.expander("**:bulb: AI settings**", expanded=True):
             #c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
 
 
-
-
 # chat
-if st.session_state.messages != []:
-
+if st.session_state.messages:
     for message in st.session_state.messages[1:]:
         with st.chat_message(message["role"]):
             st.write(message["content"])

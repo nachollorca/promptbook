@@ -1,7 +1,7 @@
-import streamlit
+import streamlit as st
 import openai
 import tiktoken
-
+import re
 
 def launch_prompt(messages: list, api_key: str, model = "gpt-4", temperature = 0) -> str:
     openai.api_key = api_key
@@ -63,5 +63,10 @@ def are_required_filled(args: dict, params: dict) -> bool:
 
 
 def reset_chat_callback():
-    streamlit.session_state.messages = []
+    st.session_state.messages = []
+
+
+def fix_pdf_text(text):
+    text = re.sub('\s+[-]\s+','',text)
+    return text
 
