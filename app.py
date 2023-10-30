@@ -4,8 +4,7 @@ import importlib.util
 import sys
 import inspect
 from inspect import cleandoc
-from prompt import launch_prompt, get_token_cost
-from utils import are_required_filled, reset_chat_callback
+from utils import *
 
 # set page
 st.set_page_config(page_title="Promptbook", page_icon="media/logo.png", initial_sidebar_state="collapsed")
@@ -109,7 +108,7 @@ with st.expander("**:arrow_forward: Inputs**", expanded=True):
         if v in ["", None]:
             args[k] = params[k]["default"]
 
-    # generate prompt
+    # generate and clean prompt
     prompt = cleandoc(function(**args))
 
     # inspect/tune prompt
@@ -127,8 +126,8 @@ with st.expander("**:arrow_forward: Inputs**", expanded=True):
             st.warning("Please fill in all required values.")
 
 
-# hyperparameter selection
-with st.expander("**:gear: Model parameters**", expanded=True):
+# ai settings
+with st.expander("**:bulb: AI settings**", expanded=True):
     c1, c2 = st.columns(2)
 
     model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
@@ -137,7 +136,7 @@ with st.expander("**:gear: Model parameters**", expanded=True):
     temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0,
                             help="Controls the “creativity” or randomness of the output. Higher temperatures (e.g., 0.7) result in more diverse and creative output (and potentially less coherent), while a lower temperature (e.g., 0.2) makes the output more deterministic and focused.")
 
-    if st.button("Launch prompt", use_container_width=True):
+    if st.button("Launch prompt", use_container_width=True, on_click=reset_chat_callback):
         if not are_required_filled(args, params):
             st.warning("Please fill in all required values.")
         else:
@@ -145,15 +144,19 @@ with st.expander("**:gear: Model parameters**", expanded=True):
                 st.session_state.messages.append({"role": "user", "content": prompt})
                 output = launch_prompt(st.session_state.messages, api_key, model, temperature)
                 st.session_state.messages.append({"role": "assistant", "content": output})
-                in_cost = get_token_cost(prompt, model, "input")
-                out_cost = get_token_cost(output, model, "output")
+                #in_cost = get_token_cost(prompt, model, "user")
+                #out_cost = get_token_cost(output, model, "assistant")
 
-            c1, c2 = st.columns(2)
-            c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
-            c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
+            #c1, c2 = st.columns(2)
+            #c1.metric("**Tokens** (input/output)", f'{in_cost["tokens"]} / {out_cost["tokens"]}')
+            #c2.metric("**Cost**", f'{round(in_cost["cost"] + out_cost["cost"], 5)} $')
+
+
+
 
 # chat
 if st.session_state.messages != []:
+
     for message in st.session_state.messages[1:]:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -163,8 +166,11 @@ if st.session_state.messages != []:
         with st.chat_message("user"):
             st.write(user_reply)
 
-        ai_reply = launch_prompt(st.session_state.messages, api_key, model, temperature)
+        with st.spinner("**:gear:** on it..."):
+            ai_reply = launch_prompt(st.session_state.messages, api_key, model, temperature)
+
         st.session_state.messages.append({"role": "assistant", "content": ai_reply})
         with st.chat_message("assistant"):
             st.write(ai_reply)
+
 
