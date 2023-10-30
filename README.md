@@ -7,6 +7,8 @@ Promptbook allows you to:
  - Store your GUI-prompts to reuse them on a click
  - Use fantastic recipe ideas from other contributors
  
+_Please, note that this is just a practical PoC_
+
 ## Examples
 For a simple example, the recipe in `recipes/correct_text.py`...
 ```python

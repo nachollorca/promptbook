@@ -20,6 +20,8 @@ Promptbook allows you to:
  - Store your GUI-prompts to reuse them on a click
  - Use fantastic recipe ideas from other contributors
 
+_Please, note that this is just a practical PoC_
+
 ## How it works
 **Promptbook** is built upon Python function signatures and type hints. Then, Streamlit is used to provide a graphic interface.
 
