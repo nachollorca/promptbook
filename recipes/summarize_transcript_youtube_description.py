@@ -7,12 +7,13 @@ def summarize_transcript_youtube_description(
 		reading_level='6th grade'
 	):
 	prompt = f"""
-		Generate a video description for the transcript below that includes keywords {keywords}. Its length should be {length} and written in a {tone} tone of voice. The format of content should be arranged in the style of {style}. The reading level should be targeted to {reading_level}.
+Generate a video description for the transcript below that includes keywords {keywords}. Its length should be {length} and written in a {tone} tone of voice. The format of content should be arranged in the style of {style}. The reading level should be targeted to {reading_level}.
 
-		```
-		{transcript}
-		```
-	"""
+```
+{transcript}
+```
+"""
+
 	return prompt
 
 # Optional UI dict
