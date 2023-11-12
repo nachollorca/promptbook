@@ -139,7 +139,7 @@ with st.expander("**:arrow_forward: Inputs**", expanded=True):
 with st.expander("**:bulb: AI settings**", expanded=True):
     c1, c2 = st.columns(2)
 
-    model = c1.selectbox("Model", options=["gpt-4", "gpt-3.5-turbo"])
+    model = c1.selectbox("Model", options=["gpt-4-1106-preview", "gpt-3.5-turbo-instruct","gpt-4", "gpt-3.5-turbo-1106"])
     api_key = c2.text_input("OpenAI API key", type="password", placeholder="This will never be stored",
                             help="If you do not have one, simply click on `Visualize prompt` above and copy paste the generated prompt into [ChatGPT]()")
     temperature = st.slider("Temperature", min_value=0.0, max_value=2.0, step=0.1, value=0.0,
