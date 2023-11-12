@@ -48,7 +48,7 @@ In essence, a parser reads the prompt-generating function, identifies the argume
 Lastly, a Prompt class queries the OpenAI API and computes the answer, together with its token context and resulting cost.
 
 ## How to use
-**To use the current recipes just get to [Promptbook UI](promptbook.streamlit.app) and start playing!** If you do not have an OpenAI API key to launch the prompts, you can generate them and copy-paste into [ChatGPT](https://chat.openai.com/).
+**To use the current recipes just get to [Promptbook UI](https://promptbook.streamlit.app) and start playing!** If you do not have an OpenAI API key to launch the prompts, you can generate them and copy-paste into [ChatGPT](https://chat.openai.com/).
 
 To create your own recipes, head over to [`docs/contribute.md`](docs/contribute.md). To learn best practices on prompt engineering, I recommend [this compendium](https://www.promptingguide.ai/introduction/tips).
 
