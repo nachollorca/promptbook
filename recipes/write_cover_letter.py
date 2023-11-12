@@ -2,11 +2,12 @@
 def write_cover_letter(
         job: str,
         resume: str,
+        language: str = "English",
         style: str = None,
         vocabulary: str = None,
 ) -> str:
     prompt = f"""
-Your task is to write a cover letter for the job posting delimited by quotation marks below:
+Your task is to write a cover letter in {language} language for the job posting delimited by quotation marks below:
 
 "{job}" 
 
